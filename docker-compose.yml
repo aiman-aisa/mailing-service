@@ -1,0 +1,116 @@
+services:
+  # Laravel Service
+  app:
+    container_name: "Laravel_Application"
+    restart: always
+    build:
+      context: .
+      dockerfile: dockerfiles/laravel.dockerfile
+    environment:
+      APP_NAME: Mailing Service
+      APP_ENV: "${APP_ENV}"
+      APP_DEBUG: 'true'
+      APP_URL: http://localhost
+
+      DB_CONNECTION: "${DB_CONNECTION}"
+      DB_HOST: database
+      DB_PORT: "${DB_PORT}"
+      DB_DATABASE: "${DB_DATABASE}"
+      DB_USERNAME: "${DB_USERNAME}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+
+      MAIL_MAILER: "${MAIL_MAILER}"
+      MAIL_HOST: "${MAIL_HOST}"
+      MAIL_PORT: "${MAIL_PORT}"
+      MAIL_USERNAME: "${MAIL_USERNAME}"
+      MAIL_PASSWORD: "${MAIL_PASSWORD}"
+      MAIL_ENCRYPTION: "${MAIL_ENCRYPTION}"
+      MAIL_FROM_ADDRESS: "${MAIL_FROM_ADDRESS}"
+      MAIL_FROM_NAME: "${MAIL_FROM_NAME}"
+
+    command: >
+      sh -c "php artisan key:generate && php artisan migrate && php artisan config:clear && php artisan cache:clear && php artisan config:cache && php artisan serve --host=0.0.0.0 --port=8081"
+    ports:
+      - "8081:8081"
+    depends_on:
+      - database
+      - mailpit
+    networks:
+      - mailing_service
+
+  # Database Service
+  database:
+    image: mysql:latest
+    container_name: "MYSQL_Database_Service"
+    environment:
+      MYSQL_DATABASE: "${DB_DATABASE}"
+      MYSQL_USER: "${DB_USERNAME}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+    ports:
+      - "3306:3306"
+    networks:
+      - mailing_service
+
+  # Mailing Service
+  mailpit:
+    image: axllent/mailpit
+    container_name: "Mailpit_Service"
+    restart: always
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks:
+      - mailing_service
+
+  # Web Server Service
+  nginx:
+    container_name: "Nginx_Service"
+    build:
+      context: .
+      dockerfile: dockerfiles/nginx.dockerfile
+    ports:
+      - "80:80"
+    networks:
+      - mailing_service
+
+  # Scheduler Service
+  scheduler:
+    container_name: "Laravel_Scheduler"
+    restart: always
+    build:
+      context: .
+      dockerfile: dockerfiles/laravel.dockerfile
+    environment:
+      APP_NAME: Mailing Service
+      APP_ENV: "${APP_ENV}"
+      APP_DEBUG: 'true'
+      APP_URL: http://localhost
+
+      DB_CONNECTION: "${DB_CONNECTION}"
+      DB_HOST: database
+      DB_PORT: "${DB_PORT}"
+      DB_DATABASE: "${DB_DATABASE}"
+      DB_USERNAME: "${DB_USERNAME}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+
+      MAIL_MAILER: "${MAIL_MAILER}"
+      MAIL_HOST: "${MAIL_HOST}"
+      MAIL_PORT: "${MAIL_PORT}"
+      MAIL_USERNAME: "${MAIL_USERNAME}"
+      MAIL_PASSWORD: "${MAIL_PASSWORD}"
+      MAIL_ENCRYPTION: "${MAIL_ENCRYPTION}"
+      MAIL_FROM_ADDRESS: "${MAIL_FROM_ADDRESS}"
+      MAIL_FROM_NAME: "${MAIL_FROM_NAME}"
+
+    command: >
+      sh -c "php artisan schedule:work"
+    depends_on:
+      - app
+      - mailpit
+    networks:
+      - mailing_service
+
+networks:
+  mailing_service:
+    driver: bridge
