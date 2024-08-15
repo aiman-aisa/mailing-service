@@ -42,6 +42,7 @@ pipeline {
                     apt-get install -y python3-venv python3-pip
 
                     python3 -m venv myenv
+                    chmod +x myenv/bin/activate
                     ./myenv/bin/activate
 
                     myenv/bin/pip install selenium
