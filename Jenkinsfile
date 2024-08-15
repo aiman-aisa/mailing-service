@@ -1,7 +1,7 @@
-// docker run --name jenkins --user root -d \
-//   -p 8080:8080 -p 50000:50000 \
-//   -v /var/run/docker.sock:/var/run/docker.sock \
-//   jenkins/jenkins:lts
+docker run --name jenkins --user root -d \
+  -p 8080:8080 -p 50000:50000 \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  jenkins/jenkins:lts
 
 
 // Second step:
@@ -46,27 +46,6 @@ pipeline {
                     ./myenv/bin/activate
 
                     myenv/bin/pip install selenium pytest
-                    '''
-                }
-            }
-        }
-        stage('Setup Browser') {
-            steps {
-                script {
-                    // Install browser and driver
-                    sh '''
-                        apt-get update && apt-get install -y wget unzip
-                        # Install Chrome
-                        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-                        apt-get install -y ./google-chrome-stable_current_amd64.deb
-                        rm google-chrome-stable_current_amd64.deb
-                        
-                        # Install ChromeDriver
-                        CHROME_DRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
-                        wget https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip
-                        unzip -o chromedriver_linux64.zip
-                        mv chromedriver /usr/local/bin/
-                        rm chromedriver_linux64.zip
                     '''
                 }
             }
