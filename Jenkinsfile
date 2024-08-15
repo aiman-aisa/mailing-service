@@ -86,6 +86,9 @@ pipeline {
         stage('Run Python Selenium Tests') {
             steps {
                 script {
+                    sh 'wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip'
+                    sh 'unzip -o chromedriver_linux64.zip'
+                    sh 'mv chromedriver /usr/local/bin/ && chmod +x /usr/local/bin/chromedriver'
                     sh '''
                     myenv/bin/pytest test_sendemail.py --maxfail=1 --disable-warnings -q
                     '''
