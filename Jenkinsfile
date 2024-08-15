@@ -86,15 +86,8 @@ pipeline {
         stage('Run Python Selenium Tests') {
             steps {
                 script {
-                    sh 'apt-get update && apt-get install -y wget unzip'
-                    sh 'wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip'
-                    sh 'unzip -o chromedriver_linux64.zip'
-                    sh 'mv chromedriver /usr/local/bin/ && chmod +x /usr/local/bin/chromedriver'
                     sh '''
-                    apt-get update -y \
-                    apt-get install -y libglib2.0-0 libnss3 libgconf-2-4 libfontconfig1
-                    '''
-                    sh '''
+                    apt install chromium-chromedriver
                     myenv/bin/pytest test_sendemail.py --maxfail=1 --disable-warnings -q
                     '''
                 }
