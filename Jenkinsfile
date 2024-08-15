@@ -37,11 +37,14 @@ pipeline {
         stage('Install Python and Dependencies') {
             steps {
                 script {
-                    // Update package lists and install Python and pip
                     sh '''
                     apt-get update
-                    apt-get install -y python3 python3-pip
-                    pip3 install selenium
+                    apt-get install -y python3-venv python3-pip
+
+                    python3 -m venv myenv
+                    source myenv/bin/activate
+
+                    myenv/bin/pip install selenium
                     '''
                 }
             }
