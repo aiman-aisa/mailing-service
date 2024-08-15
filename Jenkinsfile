@@ -26,6 +26,16 @@ pipeline {
     agent any
 
     stages {
+        stage('Create Network') {
+            steps {
+                script {
+                    sh '''
+                    docker network create mailing_service || true
+                    '''
+                }
+            }
+        }
+
         stage('Build Laravel Application') {
             steps {
                 script {
@@ -88,3 +98,4 @@ pipeline {
         }
     }
 }
+
