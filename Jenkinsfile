@@ -42,28 +42,18 @@ pipeline {
             }
         }
 
-        stage('Build Laravel Application') {
+        stage('Build and Start Mailing Service') {
             steps {
                 script {
-                    sh 'docker-compose build'
+                    sh 'docker-compose up -d --build'
                 }
             }
         }
 
-        stage('Start Services') {
+        stage('Verify Services') {
             steps {
                 script {
-                    sh 'docker-compose up -d'
-                }
-            }
-        }
-
-        stage('Run Laravel Migrations') {
-            steps {
-                script {
-                    sh '''
-                    docker-compose exec -T laravel php artisan migrate
-                    '''
+                    sh 'docker-compose ps'
                 }
             }
         }
@@ -78,15 +68,15 @@ pipeline {
                 }
             }
         }
+    }
 
-        stage('Clean Up') {
-            steps {
-                script {
-                    sh 'docker-compose down'
-                }
+    post {
+        always {
+            script {
+                // Clean up services
+                sh 'docker-compose down'
             }
         }
     }
 }
-
 
