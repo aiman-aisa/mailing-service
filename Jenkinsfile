@@ -1,7 +1,8 @@
-// docker run -p 8080:8080 \
+// docker run --name jenkins --user root -d \
+//   -p 8080:8080 -p 50000:50000 \
 //   -v /var/run/docker.sock:/var/run/docker.sock \
-//   --name jenkins \
 //   jenkins/jenkins:lts
+
 
 // Second step:
 // Use bash command to get into the container:
@@ -33,10 +34,15 @@
 pipeline {
     agent any
     stages {
-        stage('Install Python Dependencies') {
+        stage('Install Python and Dependencies') {
             steps {
                 script {
-                    sh 'pip install selenium'
+                    // Update package lists and install Python and pip
+                    sh '''
+                    apt-get update
+                    apt-get install -y python3 python3-pip
+                    pip3 install selenium
+                    '''
                 }
             }
         }
