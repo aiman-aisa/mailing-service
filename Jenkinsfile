@@ -45,7 +45,7 @@ pipeline {
                     chmod +x myenv/bin/activate
                     ./myenv/bin/activate
 
-                    myenv/bin/pip install selenium
+                    myenv/bin/pip install selenium pytest
                     '''
                 }
             }
