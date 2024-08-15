@@ -42,30 +42,54 @@ pipeline {
             }
         }
 
-        stage('Build and Start Services') {
+        stage('Build Laravel Application') {
             steps {
                 script {
-                    sh 'docker-compose up -d --build'
+                    sh 'docker-compose build'
                 }
             }
         }
 
-        stage('Verify Services') {
+        stage('Start Services') {
             steps {
                 script {
-                    sh 'docker-compose ps'
+                    sh 'docker-compose up -d'
                 }
             }
         }
-    }
 
-    post {
-        always {
-            script {
-                // Clean up services
-                sh 'docker-compose down'
+        stage('Run Laravel Migrations') {
+            steps {
+                script {
+                    sh '''
+                    docker-compose exec -T laravel php artisan migrate
+                    '''
+                }
+            }
+        }
+
+        stage('Run Selenium Tests') {
+            steps {
+                script {
+                    // Navigate to the directory containing your test script
+                    dir('path/to/your/tests') {
+                        // Install npm dependencies
+                        sh 'npm install'
+                        // Run the test script
+                        sh 'node testsendingemail.spec.js'
+                    }
+                }
+            }
+        }
+
+        stage('Clean Up') {
+            steps {
+                script {
+                    sh 'docker-compose down'
+                }
             }
         }
     }
 }
+
 
