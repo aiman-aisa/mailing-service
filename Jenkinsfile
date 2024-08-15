@@ -31,7 +31,12 @@
 // sudo chmod +x /usr/local/bin/docker-compose
 
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.9' // Use a Docker image with Python pre-installed
+            args '-u root' // Run as root to avoid permission issues
+        }
+    } 
     stages {
         stage('Install Python and Dependencies') {
             steps {
