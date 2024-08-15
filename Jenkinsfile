@@ -86,7 +86,7 @@ pipeline {
         stage('Run Python Selenium Tests') {
             steps {
                 script {
-                    docker.image('your-selenium-image').inside {
+                    docker.image('jenkins-selenium').inside {
                         sh 'myenv/bin/pytest test_sendemail.py --maxfail=1 --disable-warnings -q'
                     }
                 }
