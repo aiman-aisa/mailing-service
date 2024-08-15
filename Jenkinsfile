@@ -87,10 +87,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    # Activate the virtual environment and run the test script
-                    ls
-                    ./myenv/Scripts/activate
-                    python3 test_testsendingemail_python.py
+                    myenv/bin/python3 test_testsendingemail_python.py
                     '''
                 }
             }
