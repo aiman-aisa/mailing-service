@@ -87,7 +87,10 @@ pipeline {
             steps {
                 script {
                     // Run the test script
-                    sh 'python3 test_testsendingemail_python.py'
+                    sh '''
+                    ./myenv/bin/activate
+                    python3 test_testsendingemail_python.py
+                    '''
                 }
             }
         }
