@@ -32,71 +32,33 @@ pipeline {
         stage('Create Network') {
             steps {
                 script {
-                    sh '''
-                    docker network create mailing_service || true
-                    '''
+                    sh 'docker network create mailing_service || true'
                 }
             }
         }
 
-        stage('Build Laravel Application') {
+        stage('Build and Start Services') {
             steps {
                 script {
-                    sh '''
-                    docker build -t laravel_application -f dockerfiles/laravel.dockerfile .
-                    '''
+                    sh 'docker-compose up -d --build'
                 }
             }
         }
 
-        stage('Build Nginx Container') {
+        stage('Verify Services') {
             steps {
                 script {
-                    sh '''
-                    docker build -t nginx_service -f dockerfiles/nginx.dockerfile .
-                    '''
+                    sh 'docker-compose ps'
                 }
             }
         }
+    }
 
-        stage('Start Services') {
-            steps {
-                script {
-                    sh '''
-                    docker run -d --name MYSQL_Database_Service --network mailing_service -v /my/own/datadir:/var/lib/mysql mysql:latest
-                    docker run -d --name Mailpit_Service --network mailing_service -p 8025:8025 -p 1025:1025 axllent/mailpit
-                    '''
-                }
-            }
-        }
-
-        stage('Run Laravel Application') {
-            steps {
-                script {
-                    sh '''
-                    docker run -d --name Laravel_Application --network mailing_service -v $(pwd)/.env:/var/www/.env -p 8000:8000 laravel_application sh -c "php artisan key:generate && php artisan migrate && php artisan serve --host=0.0.0.0 --port=8000"
-                    '''
-                }
-            }
-        }
-
-        stage('Run Nginx') {
-            steps {
-                script {
-                    sh '''
-                    docker run -d --name Nginx_Service --network mailing_service -p 80:80 nginx_service
-                    '''
-                }
-            }
-        }
-
-        stage('Run Laravel Scheduler') {
-            steps {
-                script {
-                    sh '''
-                    docker run -d --name Laravel_Scheduler --network mailing_service -v $(pwd)/.env:/var/www/.env laravel_application sh -c "php artisan schedule:work"
-                    '''
-                }
+    post {
+        always {
+            script {
+                // Clean up services
+                sh 'docker-compose down'
             }
         }
     }
