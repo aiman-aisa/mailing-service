@@ -38,6 +38,7 @@ pipeline {
             steps {
                 script {
                     sh '''
+                    #!/bin/bash
                     apt-get update
                     apt-get install -y python3-venv python3-pip
 
