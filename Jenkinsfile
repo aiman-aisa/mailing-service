@@ -89,7 +89,7 @@ pipeline {
                     sh '''
                     # Activate the virtual environment and run the test script
                     ls
-                    ./env/Scripts/activate.bat
+                    ./myenv/Scripts/activate.bat
                     python3 test_testsendingemail_python.py
                     '''
                 }
