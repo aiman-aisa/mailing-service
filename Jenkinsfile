@@ -22,6 +22,9 @@
 //    stable" && \
 // apt-get update && \
 // apt-get -y install docker-ce
+
+// if got permission error do this:
+// sudo chmod 666 /var/run/docker.sock
 pipeline {
     agent any
 
