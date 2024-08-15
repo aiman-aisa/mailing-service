@@ -7,7 +7,7 @@
 // Use bash command to get into the container:
 // docker exec -it -u root:root jenkins bash
 
-// Third step:
+// Third step: (run in wsl)
 // Install docker inside the container"
 // apt-get update && \
 // apt-get -y install apt-transport-https \
@@ -23,8 +23,13 @@
 // apt-get update && \
 // apt-get -y install docker-ce
 
-// if got permission error do this:
+// if got permission error do this (run in wsl):
 // sudo chmod 666 /var/run/docker.sock
+
+// to install docker-compose inside the jenkins container (run in wsl)
+// sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+// sudo chmod +x /usr/local/bin/docker-compose
+
 pipeline {
     agent any
 
