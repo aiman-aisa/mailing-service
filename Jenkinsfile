@@ -50,6 +50,15 @@ pipeline {
             }
         }
 
+        stage('Wait Before Testing') {
+            steps {
+                script {
+                    // Wait for 30 seconds
+                    sh 'sleep 30'
+                }
+            }
+        }
+
         stage('Verify Services') {
             steps {
                 script {
