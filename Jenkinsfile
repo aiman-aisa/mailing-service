@@ -33,15 +33,10 @@
 pipeline {
     agent any
     stages {
-        stage('Install Python and Dependencies') {
+        stage('Install Python Dependencies') {
             steps {
                 script {
-                    // Update package lists and install Python and pip
-                    sh '''
-                    apt-get update
-                    apt-get install -y python3 python3-pip
-                    pip3 install selenium
-                    '''
+                    sh 'pip install selenium'
                 }
             }
         }
