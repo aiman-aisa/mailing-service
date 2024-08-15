@@ -108,7 +108,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    myenv/bin/python3 test_sendemail.py
+                    myenv/bin/pytest test_sendemail.py --maxfail=1 --disable-warnings -q
                     '''
                 }
             }
