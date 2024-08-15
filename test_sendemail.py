@@ -3,6 +3,8 @@ import pytest
 import time
 import json
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions
@@ -12,7 +14,16 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 class TestSendemail():
   def setup_method(self, method):
-    self.driver = webdriver.Chrome()
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")  # Run in headless mode
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+
+    # Provide path to the ChromeDriver executable
+    service = Service('/usr/local/bin/chromedriver')
+
+    # Initialize the Chrome driver
+    self.driver = webdriver.Chrome(service=service, options=chrome_options)
     self.vars = {}
   
   def teardown_method(self, method):
