@@ -54,7 +54,7 @@ pipeline {
             steps {
                 script {
                     // Wait for 30 seconds
-                    sh 'sleep 30'
+                    sh 'sleep 15'
                 }
             }
         }
