@@ -32,8 +32,19 @@
 
 pipeline {
     agent any
-
     stages {
+        stage('Install Python and Dependencies') {
+            steps {
+                script {
+                    // Update package lists and install Python and pip
+                    sh '''
+                    apt-get update
+                    apt-get install -y python3 python3-pip
+                    pip3 install selenium
+                    '''
+                }
+            }
+        }
         stage('Create Network') {
             steps {
                 script {
@@ -67,13 +78,11 @@ pipeline {
             }
         }
 
-        stage('Run Selenium Tests') {
+        stage('Run Python Selenium Tests') {
             steps {
                 script {
-                    // Install npm dependencies
-                    sh 'npm install'
                     // Run the test script
-                    sh 'node testsendingemail.spec.js'
+                    sh 'python3 test_testsendingemail_python.py'
                 }
             }
         }
