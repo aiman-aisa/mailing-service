@@ -71,13 +71,10 @@ pipeline {
         stage('Run Selenium Tests') {
             steps {
                 script {
-                    // Navigate to the directory containing your test script
-                    dir('path/to/your/tests') {
-                        // Install npm dependencies
-                        sh 'npm install'
-                        // Run the test script
-                        sh 'node testsendingemail.spec.js'
-                    }
+                    // Install npm dependencies
+                    sh 'npm install'
+                    // Run the test script
+                    sh 'node testsendingemail.spec.js'
                 }
             }
         }
