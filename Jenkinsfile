@@ -69,8 +69,8 @@ pipeline {
         stage('Wait Before Testing') {
             steps {
                 script {
-                    // Wait for 15 seconds
-                    sh 'sleep 15'
+                    // Wait for 30 seconds
+                    sh 'sleep 60'
                 }
             }
         }
