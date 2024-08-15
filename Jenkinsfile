@@ -54,13 +54,13 @@ pipeline {
         }
     }
 
-    // post {
-    //     always {
-    //         script {
-    //             // Clean up services
-    //             sh 'docker-compose down'
-    //         }
-    //     }
-    // }
+    post {
+        always {
+            script {
+                // Clean up services
+                sh 'docker-compose down'
+            }
+        }
+    }
 }
 
