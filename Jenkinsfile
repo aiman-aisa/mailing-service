@@ -1,7 +1,7 @@
-// docker run --name jenkins --user root -d \
-//   -p 8080:8080 -p 50000:50000 \
-//   -v /var/run/docker.sock:/var/run/docker.sock \
-//   jenkins/jenkins:lts
+docker run --name jenkins --user root -d \
+  -p 8080:8080 -p 50000:50000 \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  jenkins/jenkins:lts
 
 
 // Second step:
@@ -86,10 +86,9 @@ pipeline {
         stage('Run Python Selenium Tests') {
             steps {
                 script {
-                    sh '''
-                    apt install chromium-chromedriver
-                    myenv/bin/pytest test_sendemail.py --maxfail=1 --disable-warnings -q
-                    '''
+                    docker.image('your-selenium-image').inside {
+                        sh 'myenv/bin/pytest test_sendemail.py --maxfail=1 --disable-warnings -q'
+                    }
                 }
             }
         }
