@@ -69,7 +69,7 @@ pipeline {
         stage('Wait Before Testing') {
             steps {
                 script {
-                    // Wait for 30 seconds
+                    // Wait for 15 seconds
                     sh 'sleep 15'
                 }
             }
@@ -94,13 +94,13 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            script {
-                // Clean up services
-                sh 'docker-compose down'
-            }
-        }
-    }
+    // post {
+    //     always {
+    //         script {
+    //             // Clean up services
+    //             sh 'docker-compose down'
+    //         }
+    //     }
+    // }
 }
 
