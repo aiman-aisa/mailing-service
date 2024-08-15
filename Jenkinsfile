@@ -64,7 +64,7 @@ pipeline {
                         # Install ChromeDriver
                         CHROME_DRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
                         wget https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip
-                        unzip chromedriver_linux64.zip
+                        unzip -o chromedriver_linux64.zip
                         mv chromedriver /usr/local/bin/
                         rm chromedriver_linux64.zip
                     '''
